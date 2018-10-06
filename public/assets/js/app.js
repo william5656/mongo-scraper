@@ -6,7 +6,7 @@ $( document ).ready(function() {
 
         $.get("/scrape").then(function(data) {
             console.log(data);
-            window.location = "/";
+            location.reload();
         });
     });
 
@@ -15,7 +15,7 @@ $( document ).ready(function() {
         var thisId = $(this).attr("data-id");
         console.log(thisId)
         $.post("/articles/save/"+thisId).then(function(data) {
-            console.log(data);
+            location.reload()
         })
     });
 
@@ -26,7 +26,7 @@ $( document ).ready(function() {
             method: "POST",
             url: "/articles/delete/" + Id
         }).then(function(data) {
-            window.location = "/notes"
+            location.reload()
         })
     });
 
@@ -48,7 +48,7 @@ $( document ).ready(function() {
               // Empty the notes section
               $("#noteText" + thisId).val("");
               $(".modalNote").modal("hide");
-              window.location = "/notes"
+              location.reload();
           });
     }
 });
