@@ -9,11 +9,26 @@
 
 .center {
     margin: 0;
-    background: yellow;
+    background: rgba(251, 255, 0, 0.8);;
     position: absolute;
     top: 50%;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
     text-align: center;
+}
+
+body {
+    background-image: url("../images/background2.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.mainContent {
+    background-color: rgba(255, 255, 255, 0.60);
+}
+
+a {
+    color: darkblue;
 }

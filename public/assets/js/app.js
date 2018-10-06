@@ -55,14 +55,13 @@ $( document ).ready(function() {
   //Handle Delete Note button
 $(".deleteNote").on("click", function() {
     var noteId = $(this).attr("data-note-id");
-    var articleId = $(this).attr("data-article-id");
     $.ajax({
         method: "DELETE",
-        url: "/notes/delete/" + noteId + "/" + articleId
+        url: "/notes/" + noteId
     }).then(function(data) {
         console.log(data)
         $(".modalNote").modal("hide");
-        window.location = "/notes"
+        location.reload();
     })
 });
 
