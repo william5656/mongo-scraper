@@ -1,3 +1,3 @@
 # mongo-scraper
 
-![Image of nav](./images/arrowsExplain.png) 
+![Image of nav](./images/arrowsExplains.png) 
