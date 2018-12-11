@@ -1,3 +1,3 @@
 # mongo-scraper
 
-![Image of nav](./images/title.PNG)
+<img scr="images/title.PNG" width"100">
