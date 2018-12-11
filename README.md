@@ -1,3 +1,3 @@
 # mongo-scraper
 
-<img scr="images/title.PNG" width"100">
+<img src="images/title.PNG" width"100">
