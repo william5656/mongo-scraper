@@ -15,7 +15,10 @@ var app = express();
 
 // Routes
 app.get("/", function(req, res) {
-    db.Article.find({"saved": false}, function(error, data) {
+    db.Article
+    .find({"saved": false})
+    .sort({ date: -1 })
+    .then( (data) => {
       var hbsObject = {
         article: data
       };
@@ -41,7 +44,7 @@ app.get("/notes", function(req, res){
       // Then, we load that into cheerio and save it to $ for a shorthand selector
       var $ = cheerio.load(response.data);
   
-      // Now, we grab every h2 within an article tag, and do the following:
+      // Now, we grab every h1 within an article tag, and do the following:
       $("header h1").each(function(i, element) {
         // Save an empty result object
         var result = {};
@@ -58,7 +61,6 @@ app.get("/notes", function(req, res){
         db.Article.create(result)
           .then(function(dbArticle) {
             // View the added result in the console
-            console.log(dbArticle);
           })
           .catch(function(err) {
             // If an error occurred, send it to the client
@@ -74,8 +76,10 @@ app.get("/notes", function(req, res){
   // Route for getting all Articles from the db
   app.get("/articles", function(req, res) {
     // Grab every document in the Articles collection
-    db.Article.find({}).sort( { date: -1 } )
-      .then(function(dbArticle) {
+    db.Article
+      .find({})
+      .sort({ date: -1 }) 
+      .then(dbArticle => {
         // If we were able to successfully find Articles, send them back to the client
         res.json(dbArticle);
       })
