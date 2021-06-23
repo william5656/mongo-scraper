@@ -22,8 +22,17 @@ app.get("/", function(req, res) {
       var hbsObject = {
         article: data
       };
-      console.log(hbsObject);
-      res.render("index", hbsObject);
+      //console.log(hbsObject);
+      const context = {
+        usersDocuments : data.map(document =>{
+          return {
+            title: document.title,
+            summary: document.summary,
+            link: document.link
+          }
+        })
+      }
+      res.render("index", {usersDocuments: context.usersDocuments});
     });
   });
 
@@ -32,7 +41,6 @@ app.get("/notes", function(req, res){
         var hbsObject = {
             article: data
         };
-        console.log(hbsObject);
         res.render("notes", hbsObject);
     })
 });
@@ -40,37 +48,36 @@ app.get("/notes", function(req, res){
   // A GET route for scraping the koutaku website
   app.get("/scrape", function(req, res) {
     // First, we grab the body of the html with axios
-    axios.get("https://kotaku.com/").then(function(response) {
+    axios.get("https://kotaku.com/latest").then(function(response) {
       // Then, we load that into cheerio and save it to $ for a shorthand selector
       var $ = cheerio.load(response.data);
-  
       // Now, we grab every h1 within an article tag, and do the following:
-      $("header h1").each(function(i, element) {
-        // Save an empty result object
+      $("article div.sc-3kpz0l-1").each(function(i, element) {
+        //Save an empty result object
         var result = {};
   
         // Add the text and href of every link, and save them as properties of the result object
-        result.title = $(this)
-          .children("a")
-          .text();
-        result.link = $(this)
-          .children("a")
-          .attr("href");
-  
+        result.title = $(element).find('div.sc-3kpz0l-7 a h2').text()
+        result.link = $(element).find("div.sc-3kpz0l-7 a").attr("href");
+        
         // Create a new Article using the `result` object built from scraping
         db.Article.create(result)
           .then(function(dbArticle) {
             // View the added result in the console
+            console.log(dbArticle)
           })
           .catch(function(err) {
             // If an error occurred, send it to the client
-            return res.json(err);
+            console.log(err); 
           });
-      });
-  
+      })
       // If we were able to successfully scrape and save an Article, send a message to the client
-      res.send("Scrape Complete");
-    });
+      // res.send("Scrape Complete");
+    })
+    .catch(function(err) {
+      //return err
+      return res.json(err)
+    })
   });
   
   // Route for getting all Articles from the db
@@ -79,9 +86,13 @@ app.get("/notes", function(req, res){
     db.Article
       .find({})
       .sort({ date: -1 }) 
-      .then(dbArticle => {
+      .then(dbArticles => {
         // If we were able to successfully find Articles, send them back to the client
-        res.json(dbArticle);
+        const context = {
+          usersDocuments : dbArticles
+        }
+        
+        res.json(context.usersDocuments);
       })
       .catch(function(err) {
         // If an error occurred, send it to the client

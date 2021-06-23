@@ -1,11 +1,9 @@
 $( document ).ready(function() {
 
     // Grab the articles as a json
-
     $(document).on("click", ".scrape", function(){
-
         $.get("/scrape").then(function(data) {
-            console.log(data);
+            //console.log(data);
             location.reload();
         });
     });
